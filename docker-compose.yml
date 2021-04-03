@@ -1,27 +1,27 @@
 version: "3.8"
 
 services:
-    server:
-        build: ./server
-        container_name: express-diplom-server
-        restart: always
-        user: node
-        working_dir: /app/counter
-        environment:
-            - MONGODB_PORT=${MONGODB_PORT}
-            - MONGODB_HOST=${MONGODB_HOST}
-        volumes:
-            - ./:/app:cached
-        ports:
-            - 3000:3000
+  server:
+    build: ./server
+    container_name: express-diplom-server
+    restart: always
+    user: node
+    working_dir: /app/server
+    environment:
+      - MONGODB_PORT=${MONGODB_PORT}
+      - MONGODB_HOST=${MONGODB_HOST}
+    volumes:
+      - ./:/app:cached
+    ports:
+      - 3000:3000
 
-    mongodb:
-        image: mongo
-        container_name: express-diplom-mongodb
-        restart: always
-        environment:
-            - MONGO_INITDB_DATABASE=${MONGODB_DATABASE}
-        volumes:
-            - ./database/mongodb:/data/db
-        ports:
-            - ${MONGODB_PORT}:${MONGODB_PORT}
+  mongodb:
+    image: mongo
+    container_name: express-diplom-mongodb
+    restart: always
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGODB_DATABASE}
+    volumes:
+      - ./database/mongodb:/data/db
+    ports:
+      - ${MONGODB_PORT}:${MONGODB_PORT}
