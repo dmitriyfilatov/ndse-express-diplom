@@ -3,18 +3,19 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const { container } = require('./infrastructure/container');
+const bodyParser = require('body-parser');
 
 const app = express();
 app.set('ioc_container', container);
 
-app.use(express.json());
+app.use(bodyParser());
 app.use(cors());
 
-const usersRouter = require('./web/routes/users.routes');
-app.use('/user', usersRouter);
-
 const advertisementsRouter = require('./web/routes/advertisements.routes');
-app.use('/advertisement', advertisementsRouter);
+app.use('/api/advertisements', advertisementsRouter);
+
+const authRouter = require('./web/routes/auth.routes')
+app.use('/api/', authRouter)
 
 const PORT = process.env.PORT || 3000;
 async function init() {
@@ -24,6 +25,8 @@ async function init() {
     const port = process.env.MONGODB_PORT;
     const db = `mongodb://${host}:${port}/${database}`;
     mongoose.set('useCreateIndex', true);
+    mongoose.set('useUnifiedTopology', true);
+    mongoose.set('useNewUrlParser', true);
     await mongoose.connect(db);
 
     app.listen(PORT, () => {

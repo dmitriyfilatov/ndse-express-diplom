@@ -7,12 +7,13 @@ class AdvertisementsService {
     const newAdvertisement = new Advertisement(advertisementData);
     try {
       await newAdvertisement.save();
+      return await Advertisement.findOne(newAdvertisement._id)
+        .populate({ path: 'user', select: 'id' })
+        .populate({ path: 'user', select: 'name' });
     } catch (error) {
       console.log(error);
       return { status: 'error', message: 'advertisement not saved' };
     }
-
-    return { status: 'ok', data: newAdvertisement };
   }
 
   async delete(id) {
@@ -29,21 +30,40 @@ class AdvertisementsService {
   }
 
   async find(params) {
-    const { shortText, description, userId, tags } = params;
+    const { shortText, description, user, tags } = params;
 
-    if (userId.length < 12 || userId.length > 24) {
-      return { status: 'error', message: 'wrong userId' };
+    if (user.length < 12 || user.length > 24) {
+      return { status: 'error', message: 'wrong user ID' };
     }
 
     try {
       const advertisements = await Advertisement.find({
         shortText: { $regex: shortText, $options: 'gi' },
         description: { $regex: description, $options: 'gi' },
-        userId,
+        user,
         tags: { $in: tags },
-      }).exec();
+        idDeleted: false,
+      })
+        .populate({ path: 'user', select: 'id' })
+        .populate({ path: 'user', select: 'name' })
+        .exec();
 
       return { status: 'ok', data: advertisements };
+    } catch (error) {
+      return { status: 'error', message: 'something went wrong' };
+    }
+  }
+
+  async findById(id) {
+    try {
+      const advertisement = await Advertisement.find({
+        _id: id,
+        idDeleted: false,
+      })
+        .populate('user')
+        .populate({ path: 'user', select: 'id' })
+        .populate({ path: 'user', select: 'name' });
+      return { status: 'ok', data: advertisement };
     } catch (error) {
       return { status: 'error', message: 'something went wrong' };
     }

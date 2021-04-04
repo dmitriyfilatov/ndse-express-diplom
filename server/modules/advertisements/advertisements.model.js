@@ -11,7 +11,7 @@ const schema = new Schema({
   images: {
     type: [SchemaTypes.String],
   },
-  userId: {
+  user: {
     type: SchemaTypes.ObjectId,
     ref: 'User',
     required: true,
@@ -19,12 +19,12 @@ const schema = new Schema({
   createdAt: {
     type: Date,
     required: true,
-    default: Date.now
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
     required: true,
-    default: Date.now
+    default: Date.now,
   },
   tags: {
     type: [SchemaTypes.String],
@@ -32,7 +32,7 @@ const schema = new Schema({
   isDeleted: {
     type: Boolean,
     required: true,
-    default: false
+    default: false,
   },
 });
 const Advertisement = mongoose.model('Advertisement', schema);

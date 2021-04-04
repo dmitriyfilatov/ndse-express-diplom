@@ -1,5 +1,11 @@
 const { User } = require('./users.model');
 const bcrypt = require('bcryptjs');
+// const passport = require('passport')
+
+// passport.use(User.createStrategy());
+
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 class UsersService {
   constructor() {}
@@ -24,6 +30,7 @@ class UsersService {
       return { status: 'error', message: 'something went wrong' };
     }
 
+    newUser.passwordHash = undefined;
     return { data: newUser, status: 'ok' };
   }
 

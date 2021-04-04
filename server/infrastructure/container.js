@@ -3,6 +3,7 @@ const { UsersService } = require('../modules/users/users.service');
 const {
   AdvertisementsService,
 } = require('../modules/advertisements/advertisements.service');
+const { ChatService } = require('../modules/chat/chat.service');
 
 const container = new Container();
 
@@ -14,5 +15,8 @@ container
   .bind('ADVERTISEMENTS_SERVICE')
   .to(AdvertisementsService)
   .inSingletonScope();
+
+decorate(injectable(), ChatService);
+container.bind('CHAT_SERVICE').to(ChatService).inSingletonScope();
 
 module.exports = { container };
